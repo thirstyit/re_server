@@ -14,7 +14,7 @@ output = Path(__file__).parent / "results"
 output.mkdir(exist_ok=True)
 
 
-async def run():
+async def run(url):
     # enable scrapfly cache for basic use
     realestate.BASE_CONFIG["cache"] = True
 
@@ -22,22 +22,22 @@ async def run():
 
     properties_data = await realestate.scrape_properties(
         urls=[
-            "https://www.realestate.com.au/property-house-vic-tarneit-143160680",
-            "https://www.realestate.com.au/property-house-vic-bundoora-141557712",
-            "https://www.realestate.com.au/property-townhouse-vic-glenroy-143556608",
+            #"https://www.realestate.com.au/property-house-vic-tarneit-143160680",
+            url,
+            
         ]
     )
-    with open(output.joinpath("properties.json"), "w", encoding="utf-8") as file:
-        json.dump(properties_data, file, indent=2, ensure_ascii=False)
+    #with open(output.joinpath("properties.json"), "w", encoding="utf-8") as file:
+    output = json.dumps(properties_data) #, file, indent=2, ensure_ascii=False)
 
-    search_data = await realestate.scrape_search(
-        # you can change "buy" to "rent" in the search URL to search for properties for rent
-        url="https://www.realestate.com.au/buy/in-melbourne+-+northern+region,+vic/list-1",
-        max_scrape_pages=3,
-    )
-    with open(output.joinpath("search.json"), "w", encoding="utf-8") as file:
-        json.dump(search_data, file, indent=2, ensure_ascii=False)
-
+    # search_data = await realestate.scrape_search(
+    #     # you can change "buy" to "rent" in the search URL to search for properties for rent
+    #     url="https://www.realestate.com.au/buy/in-melbourne+-+northern+region,+vic/list-1",
+    #     max_scrape_pages=3,
+    # )
+    # with open(output.joinpath("search.json"), "w", encoding="utf-8") as file:
+    #     json.dump(search_data, file, indent=2, ensure_ascii=False)
+    return output
 
 if __name__ == "__main__":
     asyncio.run(run())
