@@ -4,6 +4,7 @@ from starlette import status
 import run
 import asyncio
 import os
+import uvicorn
 
 api_keys = [
     os.environ["SAMS_API_TEST_KEY"],
@@ -26,3 +27,6 @@ def get_api_key(api_key_header: str = Security(api_key_header)) -> str:
 def scrape(url: str, api_key: str = Security(get_api_key)):
     out = asyncio.run(run.run(url))
     return out
+
+if __name__ == '__main__':
+    uvicorn.run(app, host="0.0.0.0", port=10000)
